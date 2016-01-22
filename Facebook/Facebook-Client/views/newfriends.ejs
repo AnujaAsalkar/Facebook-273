@@ -1,0 +1,331 @@
+<html>
+<head>
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+<script src= "http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+
+
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	
+	
+	<link rel="stylesheet"href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+
+<!-- Latest compiled JavaScript -->
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"> -->
+<!-- <script 
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script> -->
+	
+ <!-- <meta http-equiv="Cache-Control"
+ 	content="no-cache, no-store, must-revalidate" />
+ <meta http-equiv="Pragma" content="no-cache" />
+ <meta http-equiv="Expires" content="0" />  -->
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Welcome</title>
+</head>
+<body ng-app="welcome" ng-controller="for_logout">
+
+
+<!-- top nav -->
+	
+              	<div class="navbar navbar-blue navbar-static-top"  style="background:#191970 ">  
+                    <div class="navbar-header">
+                      <!-- <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle</span>
+                        <span class="icon-bar"></span>
+                                				<span class="icon-bar"></span>
+                                				<span class="icon-bar"></span>
+                      </button> -->
+                      <a href="/" class="navbar-brand logo"><font color="white">myfacebook</font></a>
+                  	</div>
+                  	<nav class="collapse navbar-collapse" role="navigation">
+                    <form class="navbar-form navbar-left">
+                        <div class="input-group input-group-sm" style="max-width:5000px;">
+                          <input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term">
+                          <div class="input-group-btn">
+                            <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                          </div>
+                        </div>
+                    </form>
+                    <ul class="nav navbar-nav">
+                      <li>
+                        <a href='/homepage'><i class="glyphicon glyphicon-home"></i> <font color="white">Home</font></a>
+                      </li>
+                      <li>
+                        <a href="/about" role="button" data-toggle="modal"><i class="glyphicon glyphicon-plus"></i><font color="white"> About</font></a>
+                      </li> 
+                      <li>
+                        <a href="#"><span class="badge"><%=username%></span></a>
+                      </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"><font color="white">Logout</font></i></a>
+                        <ul class="dropdown-menu">
+                          <li><a href="">More</a></li>
+                          <li><a href="">More</a></li>
+                          <li><a href="">More</a></li>
+                          <li><a href="">More</a></li>
+                          <li><a href="">More</a></li>
+                        </ul>
+                      </li>
+                    </ul>
+                  	</nav>
+                </div>
+                <!-- /top nav -->
+                
+                
+            
+<!-- <div class="container">
+
+  <ul class="nav nav-tabs">
+    <li class="active"><a data-toggle="tab" ng-click="my_friends()">MY FRIENDS</a></li>
+    <li><a data-toggle="tab" href="#friends_request">SEND FRIEND REQUEST</a></li>
+  </ul>
+
+  <div class="tab-content">
+    <div id="friends" class="tab-pane fade in active">
+      <h3>MY FRIENDS</h3>
+      
+    </div>
+    <div id="friends_request" class="tab-pane fade">
+      <h3>SEND FRIEND REQUEST</h3>
+    
+    </div>
+    </div>
+</div> -->
+
+
+<input type="submit" class="btn btn-primary" value="My Friends" ng-click="my_friends()"/>
+<input type="submit" class="btn btn-primary" value="Send Friend Request" ng-click="find_friends()"/>
+<input type="submit" class="btn btn-primary" value="Pending Friend Requests" ng-click="see_friends()"/>	
+
+<div ng-hide="findfriends" >
+<table>
+		<tr ng-repeat="a in temp_arr">
+    		<td><h4>&nbsp;&nbsp;&nbsp;{{a.fname}} &nbsp;&nbsp;&nbsp;<input type="submit" class="btn btn-secondary" value="Add Friend" ng-click="add_f(a.fname,user)"/><br><br></td>
+    	</tr>
+</table>	
+</div>
+
+<div ng-hide="seefriends">
+<table><br>
+	<tr ng-repeat="a in temp_arr">
+    		<td><h4>&nbsp;&nbsp;&nbsp;&nbsp;{{a.requestor}} &nbsp;&nbsp;&nbsp;<input class="btn btn-primary" type="submit" value="Confirm" ng-click="accept_f(a.requestor,user)"/>&nbsp;&nbsp;<input type=submit class="btn btn-secondary" value="Decline" ng-click="decline()"><br><br></td>
+ 	</tr>
+</table>
+</div>
+
+<div ng-hide="myfriends">
+<table>
+	<tr ng-repeat="a in temp_arr">
+    		<td><h4>&nbsp;&nbsp;&nbsp;&nbsp;{{a}}<br></td>
+ 	</tr>
+</table>
+</div>
+
+</body>
+</html>  
+ <script>
+var l=angular.module('welcome',[]);
+l.controller('for_logout',function($scope, $http){
+		
+		$scope.findfriends=true;
+		$scope.seefriends=true;
+		$scope.myfriends=true;
+		$scope.temp_arr=[];
+		$scope.user="<%=username%>";
+
+		$scope.logout= function() {	
+		$http({
+	            method: 'POST',
+	            url: '/logout'
+	         });			
+			};
+			
+			
+		$scope.find_friends=function(){
+		alert($scope.user);
+		$http({
+	            method: 'POST',
+	            url: '/find_friends',
+	            data: { 
+	            "user" :"<%=username%>" }
+	         }).success(function(response) {
+				//alert(JSON.stringify(response));
+	            
+	            if(response.login == "Success")
+	            {
+	            	//alert("friend:"+JSON.stringify(response.friends[0].fname));
+	            	//console.log("friend:"+JSON.stringify(response.friends[0]));
+	           		//window.location = '/friends/'+response.friends;
+	           		//window.location='/friends';
+	           		for(var i in response.friends)
+	           		{
+	           			$scope.temp_arr.push(response.friends[i]);
+	           		}
+	           		$scope.findfriends=false;
+	           	}
+	           	else
+	           		console.log("error");
+	            
+	        }).error(function(error){
+	            $scope.invalid_login = true;
+				$scope.unexpected_error = false;
+	        });	
+			};
+			
+			
+			$scope.add_f=function(requested,requestor){
+		console.log("inside click");
+		alert(requestor);
+		alert(requested);
+		$http({
+	            method: 'POST',
+	            url: '/friend_request',
+	            data: 
+	            { 
+	            	"requestor":requestor,
+	            	"requested":requested
+	            },
+	         }).success(function(response) {
+	         
+	         alert(JSON.stringify(response));
+	         if(response.login == "Success")
+	            {
+	            	//alert("friend:"+JSON.stringify(response.friends[0].fname));
+					alert("succcess");
+	           		window.location='/homepage';
+	           	}
+	           	else
+	           		console.log("error");
+				
+	           	
+	        }).error(function(error){
+	            
+	        });	
+			};
+			
+			
+			
+		$scope.see_friends=function(){
+			alert("inside see_friends");
+		$http({
+	            method: 'POST',
+	            url: '/see_friends',
+	            data: { 
+	            "user" :"<%=username%>" }
+	         }).success(function(response) {
+				alert(JSON.stringify(response));
+	            
+	            if(response.login == "Success")
+	            {
+	            	
+	           		//window.location='/show_friends';
+	           		
+	           		for(var i in response.friend_requests)
+	           		{
+	           			$scope.temp_arr.push(response.friend_requests[i]);
+	           		}
+	           		$scope.seefriends=false;
+	           	}
+	           	else
+	           		console.log("error");
+	            
+	        }).error(function(error){
+	            $scope.invalid_login = true;
+				$scope.unexpected_error = false;
+	        });	
+			};
+			
+			
+			$scope.accept_f=function(requested,requestor){
+		console.log("inside click");
+		alert(requestor);
+		alert(requested);
+		$http({
+	            method: 'POST',
+	            url: '/friend_acccept',
+	            data: 
+	            { 
+	            	"requestor":requestor,
+	            	"requested":requested
+	            },
+	         }).success(function(response) {
+	         
+	         alert(JSON.stringify(response));
+	         if(response.login == "Success")
+	            {
+	            	//alert("friend:"+JSON.stringify(response.friends[0].fname));
+					alert("succcess");
+	           		window.location='/homepage';
+	           	}
+	           	else
+	           		console.log("error");
+				
+	           	
+	        }).error(function(error){
+	            
+	        });	
+			};
+			
+			
+			$scope.my_friends=function(){
+			alert("inside my friends:"+$scope.user);
+			$http({
+	            method: 'POST',
+	            url: '/my_friends',
+	            data: { 
+	            "user" :"<%=username%>" }
+	         }).success(function(response){
+				alert(JSON.stringify(response.friends));
+	   			var temp;
+	            if(response.login == "Success")
+	            {
+	           		for(var i in response.friends)
+	           		{
+	           			alert(JSON.stringify(response.friends[i].requestor));
+	           			temp=JSON.stringify(response.friends[i].requestor);
+	      				if(temp.localeCompare($scope.user)==0)
+	      				{
+	      					alert("inside if:"+JSON.stringify(response.friends[i].requestor));
+	           				$scope.temp_arr.push(response.friends[i].requestor);
+	           			}
+	           			if(temp.localeCompare($scope.user)==-1)
+	           			{
+	           				alert("inside else:"+JSON.stringify(response.friends[i].requested));
+	           				$scope.temp_arr.push(response.friends[i].requested);
+	           			}
+	           		}
+	           		$scope.myfriends=false;
+	           	
+	           	}
+	           	else
+	           		console.log("error");
+	            
+	        }).error(function(error){
+	            $scope.invalid_login = true;
+				$scope.unexpected_error = false;
+	        });	
+			}
+			
+});
+
+
+</script>     
+</body>
+</html>
+ 

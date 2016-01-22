@@ -1,0 +1,185 @@
+<html>
+<head>
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+<script src= "http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+
+
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	
+	
+	<link rel="stylesheet"href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+
+<!-- Latest compiled JavaScript -->
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"> -->
+<!-- <script 
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script> -->
+	
+ <!-- <meta http-equiv="Cache-Control"
+ 	content="no-cache, no-store, must-revalidate" />
+ <meta http-equiv="Pragma" content="no-cache" />
+ <meta http-equiv="Expires" content="0" />  -->
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Welcome</title>
+</head>
+<body ng-app="groups" ng-controller="groups_cont">
+
+
+<!-- top nav -->
+	
+              	<div class="navbar navbar-blue navbar-static-top"  style="background:#191970 ">  
+                    <div class="navbar-header">
+                      <!-- <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle</span>
+                        <span class="icon-bar"></span>
+                                				<span class="icon-bar"></span>
+                                				<span class="icon-bar"></span>
+                      </button> -->
+                      <a href="/" class="navbar-brand logo"><font color="white">myfacebook</font></a>
+                  	</div>
+                  	<nav class="collapse navbar-collapse" role="navigation">
+                    <form class="navbar-form navbar-left">
+                        <div class="input-group input-group-sm" style="max-width:5000px;">
+                          <input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term">
+                          <div class="input-group-btn">
+                            <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                          </div>
+                        </div>
+                    </form>
+                    <ul class="nav navbar-nav">
+                      <li>
+                        <a href='/homepage'><i class="glyphicon glyphicon-home"></i><font color="white">Home</font></a>
+                      </li>
+                      <li>
+                        <a href="/about" role="button" data-toggle="modal"><i class="glyphicon glyphicon-plus"></i><font color="white"> About</font></a>
+                      </li> 
+                      <li>
+                        <a href="#"><span class="badge"><%=username%></span></a>
+                      </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"><font color="white">Logout</font></i></a>
+                        <ul class="dropdown-menu">
+                          <li><a href="">More</a></li>
+                          <li><a href="">More</a></li>
+                          <li><a href="">More</a></li>
+                          <li><a href="">More</a></li>
+                          <li><a href="">More</a></li>
+                        </ul>
+                      </li>
+                    </ul>
+                  	</nav>
+                </div>
+                <!-- /top nav -->
+                
+  <div class="col-md-12">
+  <form >
+	<h1><font color="black"> GROUPS </h1>
+		<div class="col-md-6">
+		<input class="btn btn-primary" type="submit" value="Show Groups" ng-click="show_groups()"/><br>
+		<div ng-hide="avail_grp"><br>
+		<table>
+			<tr ng-repeat="g in groups">
+    			<td>{{g.group_name}}</td>
+    		</tr>
+    	</table>
+		</div><br><br>
+		<input class="btn btn-primary" type="submit" value="Create Group" ng-click="show_textbox()"/><br>
+		<div ng-hide="grp"><br>
+		Group Name:<br><input type="text" ng-model="group"/>
+		<input class="btn btn-success" type="submit" value="Create" ng-click="create_group()"/>
+		</div>
+			<input class="btn btn-primary" type="submit" value="Delete Group"/><br>
+		</div>
+		<div class="col-md-6">
+		</div>
+  </form>
+</div>
+<script>
+var l=angular.module('groups',[]);
+l.controller('groups_cont',function($scope, $http){
+	$scope.groups=[];
+	$scope.grp=true;
+	$scope.avail_grp=true;
+	$scope.show_textbox=function()
+	{
+		$scope.grp=false;
+	}
+	$scope.create_group=function(){
+		$http({
+	            method: 'POST',
+	            url: '/create_group',
+	            data: { 
+	            "user" :"<%=username%>",
+	            "group_name" : $scope.group }
+	         }).success(function(response) {
+				//alert(JSON.stringify(response));
+	            
+	            if(response.login == "Success")
+	            {
+	            	//alert("friend:"+JSON.stringify(response.friends[0].fname));
+	            	//console.log("friend:"+JSON.stringify(response.friends[0]));
+	           		//window.location = '/friends/'+response.friends;
+	           		window.location='/homepage';
+	           	}
+	           	else
+	           		console.log("error");
+	            
+	        }).error(function(error){
+	           
+	        });	
+			};
+			
+			
+		$scope.show_groups=function(){
+		$http({
+	            method: 'POST',
+	            url: '/show_groups',
+	            data: { 
+	            "user" :"<%=username%>",
+	            "group_name" : $scope.group }
+	         }).success(function(response) {
+				alert(JSON.stringify(response));
+	            
+	            if(response.login == "Success")
+	            {
+	            	//alert("friend:"+JSON.stringify(response.friends[0].fname));
+	            	//console.log("friend:"+JSON.stringify(response.friends[0]));
+	           		//window.location = '/friends/'+response.friends;
+	           		for(var i in response.groups)
+	           		{
+	           			$scope.groups.push(response.groups[i]);
+	           		}
+	           		$scope.avail_grp=false;
+	           		
+	           		
+	           	}
+	           	else
+	           		console.log("error");
+	            
+	        }).error(function(error){
+	           
+	        });	
+			};	
+         
+         
+ });
+</script>     
+</body>
+</html>
+ 
